@@ -1,0 +1,39 @@
+[Ayuda]
+Para correr un contenedor basado en esta imagen primero debe cargarse utilizando la opción load. Luego se debe crear un contenedor a partir de la imagen cargada.
+
+• docker load -i let20d.tar
+
+• docker run -it IMAGE ID
+
+[Documentación]
+La creación de esta imagen se ha realizado en un archivo dockerfile. A continuación se explicará el contenido de dicho archivo para que pueda replicarse adaptándose a sus propias necesidades.
+
+• Se ha utilizado como base la última imagen de alpine actualmente. 
+FROM alpine:3.12.1
+
+• Se documenta el autor de la imagen.
+MAINTAINER Lucas Trecanao "let20ddocker@gmail.com"
+
+• Se sincronizan y actualizan los paquetes, además se instalan todos los paquetes necesarios para implementar php tanto para desarrollo como para ejecución.
+RUN apk update; \
+    apk upgrade; \
+    apk add php7 php7-fpm php7-opcache
+
+• Se copia el contenido de build en la raíz. En este caso será un directorio php con un programa y su respectiva licencia.
+COPY build /
+
+• Indica que comando debe ejecutar cada vez que se inicie el contenedor creado a partir de la imagen.
+CMD php /php/let20d.php
+
+[Preguntas frecuentes]
+A continuación se responderán aquellas preguntas que pueden surgir con la lectura de la documentación de la imagen.
+
+• ¿Porqué dockerfile?
+Se ha escogido trabajar en un archivo dockerfile ya que provee una solución sencilla y limpia a la hora de crear la imagen.
+
+• ¿Porqué Alpine?
+Se ha escogido la imagen base Alpine ya que posee lo mínimamente necesario para desplegar un servicio en ella. El peso de su imagen base no sobrepasa los 3MB en todas las arquitecturas, lo que la convierte en una imagen muy portable. Por poner un ejemplo, la imagen base de Ubuntu ronda los 25MB a 30MB dependiendo su arquitectura.
+
+• ¿Porqué PHP?
+Se ha escogido desplegar PHP ya que por su popularidad es muy utilizada por desarrolladores, y podría fácilmente trasladarse a un ambiente de desarrollo sobre Docker.
+
